@@ -1,0 +1,27 @@
+version: '3.5'
+
+services:
+  db-postgres:
+    image: postgres
+    container_name: postgres_rinha
+    hostname: database
+    environment:
+      POSTGRES_DB: rinha
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '1GB'
+    networks:
+      - app-network
+  cache:
+    hostname: cache
+    image: redis:latest
+    command: [ "redis-server", "--appendonly", "no", "--save ''" ]
+    ports:
+      - '6379:6379'
+networks:
+  app-network:
