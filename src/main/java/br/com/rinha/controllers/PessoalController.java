@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-import static org.springframework.http.HttpStatus.CREATED;
-
 @RestController
 public class PessoalController {
 
@@ -24,19 +22,17 @@ public class PessoalController {
 
     @GetMapping("/pessoas")
     public ResponseEntity<List<Pessoa>> getAll(@RequestParam(required = false, name = "t") String t) {
-        return t != null && !t.isEmpty() ? ResponseEntity.ok(pessoaService.buscarPessoas(t)) : ResponseEntity.ok(pessoaService.listaPessoas());
+        return t != null && !t.isEmpty() ? pessoaService.buscarPessoas(t) : pessoaService.listaPessoas();
     }
 
     @PostMapping("/pessoas")
-    public ResponseEntity<Pessoa> addPessoas(@Valid @RequestBody Pessoa pessoa) {
-        Pessoa pessoaCriada = this.pessoaService.cadastraPessoa(pessoa);
-        return ResponseEntity.status(CREATED).header("Location", "/pessoas/".concat(pessoa.getId().toString())).body(pessoaCriada);
+    public ResponseEntity<Object> addPessoas(@Valid @RequestBody Pessoa pessoa) {
+        return this.pessoaService.cadastraPessoa(pessoa);
     }
 
     @GetMapping("/pessoas/{id}")
-    public ResponseEntity<Pessoa> buscaPessoaPeloID(@PathVariable("id") UUID id) {
-        Pessoa pessoa = pessoaService.buscaPessoaPeloID(id);
-        return ResponseEntity.ok(pessoa);
+    public ResponseEntity<Object> buscaPessoaPeloID(@PathVariable("id") UUID id) {
+        return pessoaService.buscaPessoaPeloID(id);
     }
 
     @GetMapping("/contagem-pessoas")

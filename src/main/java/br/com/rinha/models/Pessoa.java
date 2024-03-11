@@ -1,8 +1,11 @@
 package br.com.rinha.models;
 
 import br.com.rinha.config.PersonJsonDeserializer;
+import br.com.rinha.config.PersonJsonSerializer;
 import br.com.rinha.validators.string.StringOnly;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -49,6 +52,10 @@ public class Pessoa implements Serializable {
 
     //@StringOnly
     @JsonDeserialize(using = PersonJsonDeserializer.class)
-    private List<String> stack;
+    @JsonSerialize(using = PersonJsonSerializer.class)
+    private String stack;
+
+    @JsonIgnore
+    private String termoBusca;
 
 }

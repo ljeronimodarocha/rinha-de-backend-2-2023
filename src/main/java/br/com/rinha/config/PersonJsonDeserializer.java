@@ -10,19 +10,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PersonJsonDeserializer extends JsonDeserializer<List<String>> {
+public class PersonJsonDeserializer extends JsonDeserializer<String> {
     @Override
-    public List<String> deserialize(JsonParser jsonParser, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-        List<String> list = new ArrayList<>();
+    public String deserialize(JsonParser jsonParser, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+        StringBuilder builder = new StringBuilder();
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
         if (node.isArray()) {
             for (JsonNode elementNode : node) {
                 if (elementNode.isInt() || elementNode.isBigInteger()) {
-                    throw new JsonProcessingException("O valor deve ser string") {};
+                    throw new JsonProcessingException("O valor deve ser string") {
+                    };
                 }
-                list.add(elementNode.asText());
+                if (!builder.isEmpty()) builder.append(", ");
+                builder.append(elementNode.asText());
             }
         }
-        return list;
+        return builder.toString();
     }
+
 }

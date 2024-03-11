@@ -7,11 +7,11 @@ services:
     hostname: spring-api1
     environment:
       - DATABASE_URL=database
-      - REDIS_HOST=cache
+      #- REDIS_HOST=cache
       - PORT=3000
     depends_on:
       - db-postgres
-      - cache
+      #- cache
     ulimits:
       nofile:
         soft: 1000000
@@ -29,11 +29,11 @@ services:
     hostname: spring-api2
     environment:
       - DATABASE_URL=database
-      - REDIS_HOST=cache
+      #- REDIS_HOST=cache
       - PORT=3001
     depends_on:
       - db-postgres
-      - cache
+      #- cache
     ulimits:
       nofile:
         soft: 1000000
@@ -80,23 +80,23 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.5'
-          memory: '1GB'
+          cpus: '0.55'
+          memory: '1.25GB'
     networks:
       - app-network
-  cache:
-    hostname: cache
-    container_name: redis
-    image: redis:latest
-    command: [ "redis-server", "--appendonly", "no", "--save ''" ]
-    ports:
-      - '6379:6379'
-    deploy:
-      resources:
-        limits:
-          cpus: '0.05'
-          memory: '0.25GB'
-    networks:
-      - app-network
+  #cache:
+  #  hostname: cache
+  #  container_name: redis
+  #  image: redis:latest
+  #  command: [ "redis-server", "--appendonly", "no", "--save ''" ]
+  #  ports:
+  #    - '6379:6379'
+  #  deploy:
+  #    resources:
+  #      limits:
+  #        cpus: '0.05'
+  #        memory: '0.25GB'
+  #  networks:
+  #    - app-network
 networks:
   app-network:
