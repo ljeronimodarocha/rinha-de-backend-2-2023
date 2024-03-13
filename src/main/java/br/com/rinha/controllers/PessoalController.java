@@ -21,8 +21,8 @@ public class PessoalController {
     }
 
     @GetMapping("/pessoas")
-    public ResponseEntity<List<Pessoa>> getAll(@RequestParam(required = false, name = "t") String t) {
-        return t != null && !t.isEmpty() ? pessoaService.buscarPessoas(t) : pessoaService.listaPessoas();
+    public ResponseEntity<List<Pessoa>> getByTermo(@RequestParam(name = "t") String t) {
+        return pessoaService.buscarPessoas(t);
     }
 
     @PostMapping("/pessoas")

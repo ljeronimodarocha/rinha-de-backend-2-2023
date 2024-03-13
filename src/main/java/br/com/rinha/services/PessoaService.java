@@ -13,9 +13,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
-
 @NoArgsConstructor
 @Service
 public class PessoaService {
@@ -31,11 +28,6 @@ public class PessoaService {
         return ResponseEntity.ok(this.repository.findByTermoDeBuscaV2(t));
     }
 
-    public ResponseEntity<List<Pessoa>> listaPessoas() {
-        return ResponseEntity.ok(this.repository.findAll());
-
-    }
-
     public ResponseEntity<Object> cadastraPessoa(Pessoa pessoa) {
         String apelidoJaExiste = this.repository.findFirstByApelido(pessoa.getApelido());
 
@@ -49,7 +41,6 @@ public class PessoaService {
         } catch (DataIntegrityViolationException exception) {
             return ResponseEntity.unprocessableEntity().build();
         }
-
     }
 
     public ResponseEntity<Object> buscaPessoaPeloID(UUID id) {
@@ -60,7 +51,6 @@ public class PessoaService {
 
         }
         return ResponseEntity.notFound().build();
-
     }
 
     public Long contagem() {

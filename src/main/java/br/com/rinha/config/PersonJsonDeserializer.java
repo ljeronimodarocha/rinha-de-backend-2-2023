@@ -18,7 +18,7 @@ public class PersonJsonDeserializer extends JsonDeserializer<String> {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
         if (node.isArray()) {
             for (JsonNode elementNode : node) {
-                if (!elementNode.isTextual() || Utils.isNumeric(elementNode.asText())) {
+                if (!elementNode.isTextual() || Utils.isNumeric(elementNode.asText()) || elementNode.asText().length() > 32) {
                     throw new IllegalArgumentException();
                 }
                 if (!builder.isEmpty()) builder.append(", ");
