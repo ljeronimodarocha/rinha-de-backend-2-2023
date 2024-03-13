@@ -12,7 +12,9 @@ import java.util.UUID;
 
 @Repository
 public interface PessoalRepository extends CrudRepository<Pessoa, UUID> {
-    Pessoa findFirstByApelido(String apelido);
+
+    @Query("select p.apelido from Pessoa p where p.apelido =  :apelido")
+    String findFirstByApelido(@Param("apelido") String apelido);
 
     @Query("select p from Pessoa p " +
             "where p.apelido like %:term% " +

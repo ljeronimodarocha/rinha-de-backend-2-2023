@@ -1,5 +1,6 @@
 package br.com.rinha.validators.string;
 
+import br.com.rinha.util.Utils;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
@@ -19,21 +20,12 @@ public class StringValidator implements ConstraintValidator<StringOnly, Object> 
         }
 
         if (value instanceof String) {
-            return isNumeric((String) value);
+            return Utils.isNumeric((String) value);
         } else if (value instanceof Collection<?> collection) {
-            return collection.stream().allMatch(item -> item instanceof String && isNumeric((String) item));
+            return collection.stream().allMatch(item -> item instanceof String && Utils.isNumeric((String) item));
         }
 
         return false; // Não é um tipo suportado
-    }
-
-    private boolean isNumeric(String str) {
-        try {
-            new BigDecimal(str);
-            return false; // É um número
-        } catch (NumberFormatException e) {
-            return true; // Não é um número, é uma string
-        }
     }
 
 

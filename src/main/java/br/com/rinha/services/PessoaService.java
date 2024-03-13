@@ -4,15 +4,17 @@ import br.com.rinha.interfaces.PessoalRepository;
 import br.com.rinha.models.Pessoa;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
 
 @NoArgsConstructor
 @Service
@@ -20,13 +22,9 @@ public class PessoaService {
 
     private PessoalRepository repository;
 
-    private RedisTemplate<String, Pessoa> redisTemplate;
-
-
     @Autowired
-    public PessoaService(PessoalRepository repository, RedisTemplate<String, Pessoa> redisTemplate) {
+    public PessoaService(PessoalRepository repository) {
         this.repository = repository;
-        this.redisTemplate = redisTemplate;
     }
 
     public ResponseEntity<List<Pessoa>> buscarPessoas(String t) {
@@ -39,17 +37,18 @@ public class PessoaService {
     }
 
     public ResponseEntity<Object> cadastraPessoa(Pessoa pessoa) {
-        Pessoa pessoalJaExiste = this.repository.findFirstByApelido(pessoa.getApelido());
+        String apelidoJaExiste = this.repository.findFirstByApelido(pessoa.getApelido());
 
-        if (pessoalJaExiste != null) {
-            return ResponseEntity
-                    .status(UNPROCESSABLE_ENTITY) // Use o código de status adequado
-                    .build();
+        if (apelidoJaExiste != null) {
+            return ResponseEntity.unprocessableEntity().build();
         }
-        pessoa.setId(UUID.randomUUID());
-        pessoa.setTermoBusca(pessoa.getNome() + ", " + pessoa.getApelido() + ", " + pessoa.getStack());
-        pessoalJaExiste = this.repository.save(pessoa);
-        return ResponseEntity.status(CREATED).header("Location", "/pessoas/".concat(pessoa.getId().toString())).body(pessoalJaExiste);
+        try {
+            pessoa.setId(UUID.randomUUID());
+            pessoa.setTermoBusca(pessoa.getNome() + ", " + pessoa.getApelido() + ", " + pessoa.getStack());
+            return ResponseEntity.created(URI.create("/pessoas/" + pessoa.getId().toString())).body(this.repository.save(pessoa));
+        } catch (DataIntegrityViolationException exception) {
+            return ResponseEntity.unprocessableEntity().build();
+        }
 
     }
 
@@ -60,7 +59,7 @@ public class PessoaService {
             return ResponseEntity.ok(pessoa);
 
         }
-        return ResponseEntity.status(NOT_FOUND).build();
+        return ResponseEntity.notFound().build();
 
     }
 

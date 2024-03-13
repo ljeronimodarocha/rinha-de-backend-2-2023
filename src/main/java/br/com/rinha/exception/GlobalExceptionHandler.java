@@ -6,13 +6,16 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.support.WebExchangeBindException;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -23,6 +26,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.UNPROCESSABLE_ENTITY) // Use o código de status adequado
                 .body(e.toString());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        if (Arrays.stream(Objects.requireNonNull(ex.getBindingResult().getAllErrors().get(0).getCodes())).anyMatch(e -> e.contains("StringOnly")))
+            return ResponseEntity.badRequest().build();
+
+        return ResponseEntity.unprocessableEntity().build();
     }
 
     @ExceptionHandler(WebExchangeBindException.class)
@@ -49,7 +61,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
         // Você pode usar o status que achar mais adequado para sua exceção
         return ResponseEntity
-                .status(HttpStatus.UNPROCESSABLE_ENTITY) // Use o código de status adequado
+                .status(HttpStatus.BAD_REQUEST) // Use o código de status adequado
                 .body(e.toString());
     }
 

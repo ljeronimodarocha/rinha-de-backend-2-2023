@@ -1,5 +1,6 @@
 package br.com.rinha.util;
 
+import java.math.BigDecimal;
 import java.util.regex.Pattern;
 
 public class Utils {
@@ -11,5 +12,14 @@ public class Utils {
             return false;
         }
         return UUID_REGEX_PATTERN.matcher(str).matches();
+    }
+
+    public static boolean isNumeric(String str) {
+        try {
+            new BigDecimal(str);
+            return false; // É um número
+        } catch (NumberFormatException e) {
+            return true; // Não é um número, é uma string
+        }
     }
 }

@@ -1,5 +1,6 @@
 package br.com.rinha.config;
 
+import br.com.rinha.util.Utils;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -17,9 +18,8 @@ public class PersonJsonDeserializer extends JsonDeserializer<String> {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
         if (node.isArray()) {
             for (JsonNode elementNode : node) {
-                if (elementNode.isInt() || elementNode.isBigInteger()) {
-                    throw new JsonProcessingException("O valor deve ser string") {
-                    };
+                if (!elementNode.isTextual() || Utils.isNumeric(elementNode.asText())) {
+                    throw new IllegalArgumentException();
                 }
                 if (!builder.isEmpty()) builder.append(", ");
                 builder.append(elementNode.asText());

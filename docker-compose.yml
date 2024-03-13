@@ -12,10 +12,6 @@ services:
     depends_on:
       - db-postgres
       #- cache
-    ulimits:
-      nofile:
-        soft: 1000000
-        hard: 1000000
     deploy:
       resources:
         limits:
@@ -34,10 +30,6 @@ services:
     depends_on:
       - db-postgres
       #- cache
-    ulimits:
-      nofile:
-        soft: 1000000
-        hard: 1000000
     deploy:
       resources:
         limits:
@@ -70,7 +62,7 @@ services:
       -c 'work_mem=64MB'
       -c 'maintenance_work_mem=128MB'
       -c 'effective_cache_size=512MB'
-      -c 'max_connections=2500'
+      -c 'max_connections=100'
     hostname: database
     environment:
       POSTGRES_DB: rinha
@@ -100,3 +92,4 @@ services:
   #    - app-network
 networks:
   app-network:
+    driver: host
