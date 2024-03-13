@@ -1,6 +1,6 @@
 # Java
 
-Github: [@juniorleaoo](https://github.com/ljeronimodarocha)
+Github: https://github.com/ljeronimodarocha)
 
 Repositório : https://github.com/ljeronimodarocha/rinha-de-backend-2-2023
 
