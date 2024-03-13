@@ -1,8 +1,8 @@
 # Java
 
-Github: [@juniorleaoo](https://github.com/juniorleaoo)
+Github: [@juniorleaoo](https://github.com/ljeronimodarocha)
 
-Repositório : [juniorleaoo/rinha-de-backend-2023-q3-java](https://github.com/juniorleaoo/rinha-de-backend-2023-q3-java)
+Repositório : https://github.com/ljeronimodarocha/rinha-de-backend-2-2023
 
 # Stack
 - Java 17
