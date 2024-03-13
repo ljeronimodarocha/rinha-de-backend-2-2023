@@ -4,14 +4,9 @@ import br.com.rinha.util.Utils;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-import java.math.BigDecimal;
 import java.util.Collection;
 
 public class StringValidator implements ConstraintValidator<StringOnly, Object> {
-
-    @Override
-    public void initialize(StringOnly constraint) {
-    }
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
@@ -19,15 +14,14 @@ public class StringValidator implements ConstraintValidator<StringOnly, Object> 
             return true; // `@NotNull` deve ser usado para checar nulo
         }
 
-        if (value instanceof String) {
-            return Utils.isNumeric((String) value);
+        if (value instanceof String valueString) {
+            return Utils.isNumeric(valueString);
         } else if (value instanceof Collection<?> collection) {
-            return collection.stream().allMatch(item -> item instanceof String && Utils.isNumeric((String) item));
+            return collection.stream().allMatch(item -> item instanceof String itemString && Utils.isNumeric(itemString));
         }
 
         return false; // Não é um tipo suportado
     }
-
 
 
 }

@@ -1,7 +1,7 @@
 package br.com.rinha.exception;
 
-import br.com.rinha.models.Exception.UsuarioJaRegistrado;
-import br.com.rinha.models.Exception.UsuarioNaoEncontrado;
+import br.com.rinha.models.exception.UsuarioJaRegistrado;
+import br.com.rinha.models.exception.UsuarioNaoEncontrado;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +30,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
         if (Arrays.stream(Objects.requireNonNull(ex.getBindingResult().getAllErrors().get(0).getCodes())).anyMatch(e -> e.contains("StringOnly")))
             return ResponseEntity.badRequest().build();
 
@@ -41,7 +40,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public Map<String, String> handleValidationExceptions(WebExchangeBindException ex) {
         Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error) -> {
+        ex.getBindingResult().getAllErrors().forEach(error -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);

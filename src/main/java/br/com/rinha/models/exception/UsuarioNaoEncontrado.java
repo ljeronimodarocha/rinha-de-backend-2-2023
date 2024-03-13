@@ -1,4 +1,4 @@
-package br.com.rinha.models.Exception;
+package br.com.rinha.models.exception;
 
 public class UsuarioNaoEncontrado extends RuntimeException {
 

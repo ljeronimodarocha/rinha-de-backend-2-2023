@@ -1,5 +1,5 @@
 # Etapa de build usando a imagem oficial do Maven
-FROM maven:3.8.4-openjdk-17 as build
+FROM maven:3.8.4-openjdk-17 AS build
 # Copia o código fonte do projeto para o container
 COPY src /usr/src/app/src
 COPY pom.xml /usr/src/app
