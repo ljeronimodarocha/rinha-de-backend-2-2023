@@ -10,6 +10,7 @@ Repositório : https://github.com/ljeronimodarocha/rinha-de-backend-2-2023
 - Spring boot
 
 ``  docker compose up --build``
+
 ``  ./stress-test/run-test.sh``
 
 ## Referências
